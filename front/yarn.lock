@@ -1176,6 +1176,21 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.0.7.tgz#96d52988efc07444c108c7c6803ba7cc93e40045"
   integrity sha512-dn5FyfSc4ky424jH4FntiHno7Ss5yLkqKNmM/NXwANRnlkmqu74pnGetexDFVG5phMk9/FhwovUZCWGxsotVKg==
 
+"@vueuse/core@^4.6.3":
+  version "4.6.3"
+  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-4.6.3.tgz#9684b602cb0d08583ee9151c52760c4db1707da2"
+  integrity sha512-x/ymdXfEOaLgxDdxGvK5v8bcImWUDXUDPJJ0xZ4GjJWYmZ1PkMgbQTyEq48kd+qKhSwgKzMAYWkL2BAbToTtOg==
+  dependencies:
+    "@vueuse/shared" "4.6.3"
+    vue-demi latest
+
+"@vueuse/shared@4.6.3":
+  version "4.6.3"
+  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-4.6.3.tgz#2659b731d1a5701d98ed85c3990331f70c7c6513"
+  integrity sha512-YWgMLvDJ51I+1waSP79Wdc1P78qmYUnLfHquNlzZCZXzR9nDx7cGXm+6HV4xEK3h8mAV38oozJOebQCoCo1DDw==
+  dependencies:
+    vue-demi latest
+
 acorn-jsx@^5.2.0, acorn-jsx@^5.3.1:
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/acorn-jsx/-/acorn-jsx-5.3.1.tgz#fc8661e11b7ac1539c47dbfea2e72b3af34d267b"
@@ -5347,6 +5362,11 @@ vite@^2.1.0:
     rollup "^2.38.5"
   optionalDependencies:
     fsevents "~2.3.1"
+
+vue-demi@latest:
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.7.4.tgz#4c6be525788e1f6b3fd5d4f5f9f2148cf6645979"
+  integrity sha512-PT0qzI9Rp8R8eUAsTPXADC+KAZdrMufmbZqEMMqvaiesWyjCpgyuuvS5Su8cvBjK9RevLT/YfFiKWxc8YB9/8g==
 
 vue-eslint-parser@^7.0.0, vue-eslint-parser@^7.6.0:
   version "7.6.0"

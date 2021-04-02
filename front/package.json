@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@graphql-codegen/typescript-operations": "^1.17.15",
+    "@vueuse/core": "^4.6.3",
     "graphql": "^15.5.0",
     "graphql-request": "^3.4.0",
     "pinia": "^2.0.0-alpha.7",

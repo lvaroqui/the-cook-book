@@ -1,5 +1,6 @@
 <template>
   <div>
+    <p>Login</p>
     <button @click="login">Login</button>
     <button @click="logout">Logout</button>
     <p v-if="user">Username: {{ user.username }}</p>
@@ -13,7 +14,7 @@ import sdk from '../sdk';
 import { useAuthStore } from '../store/auth';
 
 export default defineComponent({
-  name: 'App',
+  name: 'Login',
   setup() {
     const authStore = useAuthStore();
 
