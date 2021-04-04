@@ -9,7 +9,8 @@ module.exports = {
       main: colors.amber,
       secondary: colors.green,
       gray: colors.coolGray,
-      white: colors.white
+      white: colors.white,
+      red: colors.red[700]
     },
     extend: {
       fontFamily: {
@@ -18,7 +19,9 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ['active'],
+    }
   },
   plugins: [],
 };

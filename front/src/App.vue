@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen flex flex-col">
-    <nav class="flex bg-main-200 shadow">
+    <nav class="flex bg-main-400 shadow">
       <div class="container mx-auto flex">
         <router-link class="mx-2 py-2" to="/">The Cook Book</router-link>
         <div class="flex-grow"></div>

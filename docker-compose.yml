@@ -12,8 +12,6 @@ services:
     working_dir: /opt/back
     entrypoint: ./entrypoint.sh
     command: yarn run dev
-    ports:
-      - 3001:3001
     depends_on:
       - db
 
@@ -49,7 +47,6 @@ services:
     ports:
       - 443:443
       - 80:80
-    restart: always
     stop_signal: SIGINT
 
 volumes:

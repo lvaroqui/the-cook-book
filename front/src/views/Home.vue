@@ -13,16 +13,16 @@
           Plan your meals, hassle-free!
         </h2>
         <div class="flex justify-center content-center mt-2 mb-8">
-          <div class="h-10 flex shadow">
+          <div class="h-10 flex shadow rounded-full">
             <input
               v-model="email"
               type="email"
-              class="px-2 ml-2 hidden md:block border-2 border-secondary-300 rounded rounded-r-none"
+              class="px-3 pb-0.5 hidden md:block border-2 border-secondary-400 rounded-full rounded-r-none"
               placeholder="email@example.com"
               @keyup.enter="goToRegister"
             />
             <button
-              class="bg-secondary-300 font-bold border-2 border-secondary-300 px-6 rounded md:rounded-l-none"
+              class="bg-secondary-400 font-bold border-2 border-secondary-400 px-6 rounded-full md:rounded-l-none"
               tag="div"
               @click="goToRegister"
             >
