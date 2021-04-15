@@ -2,6 +2,7 @@
   <div class="flex flex-col" :class="wrapperClass">
     <label :class="labelClass" class="ml-2"><slot /></label>
     <input
+      v-focus="focus"
       class="w-full shadow-md transition-colors duration-300 border-gray-300 focus:border-gray-400"
       :class="inputClass"
       v-bind="$attrs"
@@ -26,6 +27,11 @@ export default defineComponent({
       required: false,
     },
     rounded: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+    focus: {
       type: Boolean,
       default: false,
       required: false,

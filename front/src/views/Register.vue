@@ -5,7 +5,14 @@
       @keyup.enter="email = '12'"
     >
       <h1 class="text-5xl font-bold mb-5 text-center">Sign up</h1>
-      <VTextBox v-model="email" placeholder="Email" type="email" big rounded />
+      <VTextBox
+        v-model="email"
+        focus
+        placeholder="Email"
+        type="email"
+        big
+        rounded
+      />
       <VTextBox
         v-model="username"
         placeholder="Username"
