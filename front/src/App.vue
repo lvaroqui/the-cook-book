@@ -13,26 +13,22 @@
         </router-link>
       </div>
     </nav>
+
     <div class="flex flex-1">
-      <router-view />
+      <RouterView />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import sdk from './sdk';
 import { useAuthStore } from './store/auth';
 
 export default defineComponent({
   name: 'App',
   setup() {
-    // Check if user is connected
-    sdk.me().then((data) => {
-      if (data.me) {
-        useAuthStore().user = data.me;
-      }
-    });
+    useAuthStore().checkAuthenticated().then();
+    return {};
   },
 });
 </script>

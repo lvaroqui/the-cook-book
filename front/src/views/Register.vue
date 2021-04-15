@@ -37,10 +37,19 @@ import { ref, defineComponent } from 'vue';
 import { useRoute } from 'vue-router';
 import sdk from '../sdk';
 import router from '../router';
+import { useAuthStore } from '../store/auth';
 
 export default defineComponent({
   name: 'Register',
   setup() {
+    const authStore = useAuthStore();
+
+    authStore.checkAuthenticated().then((authenticated) => {
+      if (authenticated) {
+        router.push('dashboard');
+      }
+    });
+
     const email = ref('');
     const username = ref('');
     const password = ref('');

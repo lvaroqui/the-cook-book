@@ -41,7 +41,7 @@ export const authenticate: Middleware = async (ctx, next) => {
 
 const UserResolver: Resolvers = {
   Query: {
-    me: (_0, _1, { ctx }) => {
+    me: async (_0, _1, { ctx }) => {
       return ctx.user;
     },
   },

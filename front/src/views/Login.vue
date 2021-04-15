@@ -34,10 +34,16 @@ import router from '../router';
 export default defineComponent({
   name: 'Login',
   setup() {
+    const authStore = useAuthStore();
+
+    authStore.checkAuthenticated().then((authenticated) => {
+      if (authenticated) {
+        router.push('dashboard');
+      }
+    });
+
     const email = ref('');
     const password = ref('');
-
-    const authStore = useAuthStore();
 
     const login = () => {
       sdk
