@@ -1,46 +1,62 @@
 <template>
-  <div>
-    <p>Login</p>
-    <button @click="login">Login</button>
-    <button @click="logout">Logout</button>
-    <p v-if="user">Username: {{ user.username }}</p>
-    <p v-else>Not connected</p>
+  <div class="flex w-screen justify-center items-center md:items-start">
+    <div class="flex flex-col md:mt-28 w-full max-w-sm" @keyup.enter="login">
+      <h1 class="text-5xl font-bold mb-5 text-center">Login</h1>
+      <VTextBox
+        v-model="email"
+        focus
+        placeholder="Email"
+        type="email"
+        big
+        rounded
+      />
+      <VTextBox
+        v-model="password"
+        placeholder="Password"
+        type="password"
+        big
+        rounded
+      />
+      <VButton big rounded @click="login">Login</VButton>
+      <router-link tag="p" class="text-link" to="register">
+        No account yet?
+      </router-link>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { ref, defineComponent } from 'vue';
 import sdk from '../sdk';
 import { useAuthStore } from '../store/auth';
+import router from '../router';
 
 export default defineComponent({
   name: 'Login',
   setup() {
+    const email = ref('');
+    const password = ref('');
+
     const authStore = useAuthStore();
 
     const login = () => {
       sdk
         .login({
-          email: 'luc@varoqui.org',
-          password: 'azerty',
+          email: email.value,
+          password: password.value,
         })
         .then((data) => {
           if (data.login) {
             authStore.user = data.login;
+            router.push('dashboard');
           }
         });
     };
 
-    const logout = () => {
-      sdk.logout().then(() => {
-        authStore.user = null;
-      });
-    };
-
     return {
-      user: computed(() => authStore.user),
+      email,
+      password,
       login,
-      logout,
     };
   },
 });

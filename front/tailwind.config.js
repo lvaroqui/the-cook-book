@@ -10,7 +10,8 @@ module.exports = {
       secondary: colors.green,
       gray: colors.coolGray,
       white: colors.white,
-      red: colors.red[700]
+      red: colors.red[700],
+      link: colors.blue[500]
     },
     extend: {
       fontFamily: {

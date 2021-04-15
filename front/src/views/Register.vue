@@ -1,9 +1,6 @@
 <template>
   <div class="flex w-screen justify-center items-center md:items-start">
-    <div
-      class="flex flex-col md:mt-28 w-full max-w-sm"
-      @keyup.enter="email = '12'"
-    >
+    <div class="flex flex-col md:mt-28 w-full max-w-sm" @keyup.enter="register">
       <h1 class="text-5xl font-bold mb-5 text-center">Sign up</h1>
       <VTextBox
         v-model="email"
@@ -28,6 +25,9 @@
         rounded
       />
       <VButton big rounded @click="register">Sign up</VButton>
+      <router-link tag="p" class="text-link" to="login">
+        Already have an account?
+      </router-link>
     </div>
   </div>
 </template>
