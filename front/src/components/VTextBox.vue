@@ -40,13 +40,16 @@ export default defineComponent({
   emits: ['update:modelValue'],
   setup(props) {
     const inputClass = computed(() => {
-      let rounded = props.rounded ? 'rounded-full' : 'rounded-lg';
+      let rounded = 'rounded-lg';
       let sizing = 'py-1 px-3 border-2';
+
       if (props.big) {
         sizing = 'py-2 px-4 text-2xl border-4';
-        if (!props.rounded) {
-          rounded = 'rounded-xl';
-        }
+        rounded = 'rounded-xl';
+      }
+
+      if (props.rounded) {
+        rounded = 'rounded-full';
       }
       return [sizing, rounded];
     });

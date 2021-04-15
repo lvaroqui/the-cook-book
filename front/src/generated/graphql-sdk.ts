@@ -73,6 +73,21 @@ export type LoginMutation = (
   )> }
 );
 
+export type RegisterMutationVariables = Exact<{
+  email: Scalars['String'];
+  username: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type RegisterMutation = (
+  { __typename?: 'Mutation' }
+  & { register?: Maybe<(
+    { __typename?: 'User' }
+    & UserFieldsFragment
+  )> }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -106,6 +121,13 @@ export const LoginDocument = gql`
   }
 }
     ${UserFieldsFragmentDoc}`;
+export const RegisterDocument = gql`
+    mutation register($email: String!, $username: String!, $password: String!) {
+  register(email: $email, username: $username, password: $password) {
+    ...UserFields
+  }
+}
+    ${UserFieldsFragmentDoc}`;
 export const MeDocument = gql`
     query me {
   me {
@@ -127,6 +149,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
   return {
     login(variables: LoginMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<LoginMutation> {
       return withWrapper(() => client.request<LoginMutation>(LoginDocument, variables, requestHeaders));
+    },
+    register(variables: RegisterMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RegisterMutation> {
+      return withWrapper(() => client.request<RegisterMutation>(RegisterDocument, variables, requestHeaders));
     },
     me(variables?: MeQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<MeQuery> {
       return withWrapper(() => client.request<MeQuery>(MeDocument, variables, requestHeaders));

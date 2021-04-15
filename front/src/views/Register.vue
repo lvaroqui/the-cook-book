@@ -27,12 +27,7 @@
         big
         rounded
       />
-      <button
-        class="py-2 mt-4 my-2 text-3xl font-bold bg-secondary-400 active:bg-secondary-300 shadow-md rounded-full"
-      >
-        Sign up
-      </button>
-      <p>{{ email }} {{ username }} {{ password }}</p>
+      <VButton big rounded @click="register">Sign up</VButton>
     </div>
   </div>
 </template>
@@ -40,22 +35,42 @@
 <script lang="ts">
 import { ref, defineComponent } from 'vue';
 import { useRoute } from 'vue-router';
-import VTextBox from '../components/VTextBox.vue';
+import sdk from '../sdk';
+import router from '../router';
 
 export default defineComponent({
   name: 'Register',
-  components: {
-    VTextBox,
-  },
   setup() {
-    const email = ref(useRoute().query.email);
+    const email = ref('');
     const username = ref('');
     const password = ref('');
+
+    if (typeof useRoute().query.email === 'string') {
+      email.value = useRoute().query.email as string;
+    }
+
+    const register = () => {
+      sdk
+        .register({
+          email: email.value,
+          username: username.value,
+          password: password.value,
+        })
+        .then((data) => {
+          if (data.register) {
+            router.push('login');
+          }
+        })
+        .catch(() => {
+          console.log('Failure :(');
+        });
+    };
 
     return {
       email,
       username,
       password,
+      register,
     };
   },
 });
