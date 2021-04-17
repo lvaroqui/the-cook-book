@@ -35,7 +35,6 @@
 <script lang="ts">
 import { ref, defineComponent } from 'vue';
 import { useRoute } from 'vue-router';
-import sdk from '../sdk';
 import router from '../router';
 import { useAuthStore } from '../store/auth';
 
@@ -59,19 +58,12 @@ export default defineComponent({
     }
 
     const register = () => {
-      sdk
-        .register({
-          email: email.value,
-          username: username.value,
-          password: password.value,
-        })
+      authStore
+        .register(email.value, username.value, password.value)
         .then((data) => {
           if (data.register) {
             router.push('login');
           }
-        })
-        .catch(() => {
-          console.log('Failure :(');
         });
     };
 

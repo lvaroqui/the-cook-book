@@ -16,6 +16,29 @@ export const useAuthStore = defineStore({
     },
   },
   actions: {
+    async logout() {
+      return new Promise<void>((resolve) => {
+        sdk.logout().then(() => {
+          this.user = null;
+          resolve();
+        });
+      });
+    },
+    async login(email: string, password: string) {
+      return new Promise<void>((resolve, reject) => {
+        sdk.login({ email, password }).then((data) => {
+          if (data.login) {
+            this.user = data.login;
+            resolve();
+          } else {
+            reject();
+          }
+        });
+      });
+    },
+    async register(email: string, username: string, password: string) {
+      return sdk.register({ email, username, password });
+    },
     async checkAuthenticated() {
       return new Promise<boolean>((resolve) => {
         // If authenticated, don't fetch API

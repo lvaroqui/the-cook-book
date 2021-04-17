@@ -46,17 +46,9 @@ export default defineComponent({
     const password = ref('');
 
     const login = () => {
-      sdk
-        .login({
-          email: email.value,
-          password: password.value,
-        })
-        .then((data) => {
-          if (data.login) {
-            authStore.user = data.login;
-            router.push('dashboard');
-          }
-        });
+      authStore.login(email.value, password.value).then(() => {
+        router.push('dashboard');
+      });
     };
 
     return {
