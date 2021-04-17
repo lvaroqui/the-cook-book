@@ -11,21 +11,24 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The `Upload` scalar type represents a file upload. */
-  Upload: any;
 };
 
-
-export enum CacheControlScope {
-  Public = 'PUBLIC',
-  Private = 'PRIVATE'
-}
+export type Error = {
+  message: Scalars['String'];
+};
 
 export type Mutation = {
   __typename?: 'Mutation';
+  _empty?: Maybe<Scalars['String']>;
+  login: UserLoginResult;
   register?: Maybe<User>;
-  login?: Maybe<User>;
   logout?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type MutationLoginArgs = {
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
 
 
@@ -35,17 +38,11 @@ export type MutationRegisterArgs = {
   password: Scalars['String'];
 };
 
-
-export type MutationLoginArgs = {
-  email: Scalars['String'];
-  password: Scalars['String'];
-};
-
 export type Query = {
   __typename?: 'Query';
+  _empty?: Maybe<Scalars['String']>;
   me?: Maybe<User>;
 };
-
 
 export type User = {
   __typename?: 'User';
@@ -53,6 +50,13 @@ export type User = {
   email: Scalars['String'];
   username: Scalars['String'];
 };
+
+export type UserLoginBadUserInputError = Error & {
+  __typename?: 'UserLoginBadUserInputError';
+  message: Scalars['String'];
+};
+
+export type UserLoginResult = User | UserLoginBadUserInputError;
 
 export type UserFieldsFragment = (
   { __typename?: 'User' }
@@ -67,10 +71,13 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = (
   { __typename?: 'Mutation' }
-  & { login?: Maybe<(
-    { __typename?: 'User' }
+  & { login: (
+    { __typename: 'User' }
     & UserFieldsFragment
-  )> }
+  ) | (
+    { __typename: 'UserLoginBadUserInputError' }
+    & Pick<UserLoginBadUserInputError, 'message'>
+  ) }
 );
 
 export type RegisterMutationVariables = Exact<{
@@ -117,7 +124,13 @@ export const UserFieldsFragmentDoc = gql`
 export const LoginDocument = gql`
     mutation login($email: String!, $password: String!) {
   login(email: $email, password: $password) {
-    ...UserFields
+    __typename
+    ... on User {
+      ...UserFields
+    }
+    ... on UserLoginBadUserInputError {
+      message
+    }
   }
 }
     ${UserFieldsFragmentDoc}`;

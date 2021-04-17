@@ -9,10 +9,8 @@
     "serve": "vite preview",
     "fix": "run-s fix:*",
     "fix:lint": "eslint src --ext ts,vue --fix src",
-    "fix:prettier": "prettier 'src/**/*.ts' 'src/**/*.vue' --write",
     "test": "run-s test:*",
     "test:lint": "eslint src --ext ts,vue src",
-    "test:prettier": "prettier --check 'src/**/*.ts' 'src/**/*.vue'",
     "generate": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {

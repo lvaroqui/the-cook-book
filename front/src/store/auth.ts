@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { User } from '../generated/graphql-sdk';
+import { LoginMutation, User } from '../generated/graphql-sdk';
 import sdk from '../sdk';
 
 export const useAuthStore = defineStore({
@@ -25,14 +25,12 @@ export const useAuthStore = defineStore({
       });
     },
     async login(email: string, password: string) {
-      return new Promise<void>((resolve, reject) => {
+      return new Promise<LoginMutation>((resolve) => {
         sdk.login({ email, password }).then((data) => {
-          if (data.login) {
+          if (data.login.__typename === 'User') {
             this.user = data.login;
-            resolve();
-          } else {
-            reject();
           }
+          resolve(data);
         });
       });
     },

@@ -1,4 +1,4 @@
-import { ApolloServer } from 'apollo-server-koa';
+import { ApolloServer, makeExecutableSchema } from 'apollo-server-koa';
 import Koa from 'koa';
 import helmet from 'koa-helmet';
 import { createConnection } from 'typeorm';
@@ -22,9 +22,14 @@ app.use(authenticate);
 
 // GraphQL
 const server = new ApolloServer({
-  typeDefs,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  resolvers: resolvers as any,
+  schema: makeExecutableSchema({
+    typeDefs,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolvers: resolvers as any,
+    resolverValidationOptions: {
+      requireResolversForResolveType: false,
+    },
+  }),
   context: ({ ctx }) => ({ ctx }),
 });
 app.use(server.getMiddleware({ path: '/graphql' }));

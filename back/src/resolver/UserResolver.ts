@@ -65,14 +65,12 @@ const UserResolver: Resolvers = {
         email: email,
       });
 
-      if (!user) {
-        ctx.status = 400;
-        return null;
-      }
-
-      if (!(await bcrypt.compare(password, user.passwordHash))) {
-        ctx.status = 400;
-        return null;
+      // If user does not exists or password doesn't match
+      if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
+        return {
+          __typename: 'UserLoginBadUserInputError',
+          message: 'Bad email or password',
+        };
       }
 
       const token = jwt.sign({ id: user.id }, SECRET);
@@ -81,9 +79,11 @@ const UserResolver: Resolvers = {
         httpOnly: true,
         sameSite: 'lax',
       });
-      ctx.status = 200;
 
-      return user;
+      return {
+        __typename: 'User',
+        ...user,
+      };
     },
 
     logout: async (_0, _1, { ctx }) => {

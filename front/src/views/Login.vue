@@ -27,7 +27,6 @@
 
 <script lang="ts">
 import { ref, defineComponent } from 'vue';
-import sdk from '../sdk';
 import { useAuthStore } from '../store/auth';
 import router from '../router';
 
@@ -46,8 +45,16 @@ export default defineComponent({
     const password = ref('');
 
     const login = () => {
-      authStore.login(email.value, password.value).then(() => {
-        router.push('dashboard');
+      authStore.login(email.value, password.value).then((data) => {
+        console.log(data);
+        switch (data.login.__typename) {
+          case 'User':
+            router.push('dashboard');
+            break;
+          case 'UserLoginBadUserInputError':
+            console.log(data.login.message);
+            break;
+        }
       });
     };
 
