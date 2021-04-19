@@ -19,7 +19,17 @@ mutation login($email: String!, $password: String!) {
 
 mutation register($email: String!, $username: String!, $password: String!) {
   register(email: $email, username: $username, password: $password) {
-    ...UserFields
+    __typename
+    ... on User {
+      ...UserFields
+    }
+
+    ... on UserRegisterBadUserInputError {
+      message
+      emailErrorMessage
+      usernameErrorMessage
+      passwordErrorMessage
+    }
   }
 }
 

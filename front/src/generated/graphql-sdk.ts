@@ -21,8 +21,8 @@ export type Mutation = {
   __typename?: 'Mutation';
   _empty?: Maybe<Scalars['String']>;
   login: UserLoginResult;
-  register?: Maybe<User>;
-  logout?: Maybe<Scalars['Boolean']>;
+  register: UserRegisterResult;
+  logout: Scalars['Boolean'];
 };
 
 
@@ -58,6 +58,16 @@ export type UserLoginBadUserInputError = Error & {
 
 export type UserLoginResult = User | UserLoginBadUserInputError;
 
+export type UserRegisterBadUserInputError = Error & {
+  __typename?: 'UserRegisterBadUserInputError';
+  message: Scalars['String'];
+  emailErrorMessage?: Maybe<Scalars['String']>;
+  usernameErrorMessage?: Maybe<Scalars['String']>;
+  passwordErrorMessage?: Maybe<Scalars['String']>;
+};
+
+export type UserRegisterResult = User | UserRegisterBadUserInputError;
+
 export type UserFieldsFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'email' | 'username'>
@@ -89,10 +99,13 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = (
   { __typename?: 'Mutation' }
-  & { register?: Maybe<(
-    { __typename?: 'User' }
+  & { register: (
+    { __typename: 'User' }
     & UserFieldsFragment
-  )> }
+  ) | (
+    { __typename: 'UserRegisterBadUserInputError' }
+    & Pick<UserRegisterBadUserInputError, 'message' | 'emailErrorMessage' | 'usernameErrorMessage' | 'passwordErrorMessage'>
+  ) }
 );
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
@@ -137,7 +150,16 @@ export const LoginDocument = gql`
 export const RegisterDocument = gql`
     mutation register($email: String!, $username: String!, $password: String!) {
   register(email: $email, username: $username, password: $password) {
-    ...UserFields
+    __typename
+    ... on User {
+      ...UserFields
+    }
+    ... on UserRegisterBadUserInputError {
+      message
+      emailErrorMessage
+      usernameErrorMessage
+      passwordErrorMessage
+    }
   }
 }
     ${UserFieldsFragmentDoc}`;

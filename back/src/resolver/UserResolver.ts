@@ -1,15 +1,9 @@
-import bcrypt from 'bcrypt';
-import * as EmailValidator from 'email-validator';
 import jwt from 'jsonwebtoken';
 import { Middleware } from 'koa';
 
 import User from '../entity/User';
 import { Resolvers } from '../generated/graphql';
 import userRepository from '../repository/UserRepository';
-
-const hashPassword = async (password: string) => {
-  return await bcrypt.hash(password, 12);
-};
 
 const SECRET = 'secret';
 
@@ -46,17 +40,26 @@ const UserResolver: Resolvers = {
     },
   },
   Mutation: {
-    register: async (_, { email, username, password }, { ctx }) => {
-      if (!EmailValidator.validate(email)) {
-        ctx.status = 400;
-        return null;
+    register: async (_, { email, username, password }) => {
+      const emailUsed = (await userRepository().findOne({ email })) != undefined;
+      const usernameUsed = (await userRepository().findOne({ username })) != undefined;
+
+      if (emailUsed || usernameUsed) {
+        return {
+          __typename: 'UserRegisterBadUserInputError',
+          message: 'Could not sign you up',
+          ...(emailUsed && { emailErrorMessage: 'Email already used' }),
+          ...(usernameUsed && { usernameErrorMessage: 'Username already used' }),
+        };
       }
-      const user = new User();
-      user.email = email;
-      user.username = username;
-      user.passwordHash = await hashPassword(password);
+
+      const user = await User.create(email, username, password);
+
       await userRepository().save(user);
-      return user;
+      return {
+        __typename: 'User',
+        ...user,
+      };
     },
 
     login: async (_, { email, password }, { ctx }) => {
@@ -66,7 +69,7 @@ const UserResolver: Resolvers = {
       });
 
       // If user does not exists or password doesn't match
-      if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
+      if (!user || !(await user.checkPassword(password))) {
         return {
           __typename: 'UserLoginBadUserInputError',
           message: 'Bad email or password',
@@ -77,7 +80,6 @@ const UserResolver: Resolvers = {
       ctx.cookies.set('Authorization', token, {
         secure: true,
         httpOnly: true,
-        sameSite: 'lax',
       });
 
       return {

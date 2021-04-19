@@ -31,7 +31,8 @@
     "koa": "^2.13.0",
     "koa-helmet": "^6.0.0",
     "pg": "^8.5.0",
-    "typeorm": "^0.2.29"
+    "typeorm": "^0.2.29",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@graphql-codegen/add": "^2.0.2",

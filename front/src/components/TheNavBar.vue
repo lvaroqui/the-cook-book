@@ -45,7 +45,6 @@ export default defineComponent({
         router.push('/');
       });
     };
-    console.log(authStore.authenticated);
 
     return {
       logout,

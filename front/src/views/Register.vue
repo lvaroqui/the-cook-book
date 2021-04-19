@@ -61,8 +61,13 @@ export default defineComponent({
       authStore
         .register(email.value, username.value, password.value)
         .then((data) => {
-          if (data.register) {
-            router.push('login');
+          switch (data.register.__typename) {
+            case 'User':
+              router.push('login');
+              break;
+            case 'UserRegisterBadUserInputError':
+              console.log(data.register);
+              break;
           }
         });
     };
