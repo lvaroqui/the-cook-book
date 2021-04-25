@@ -29,15 +29,12 @@ export type Mutation = {
 
 
 export type MutationLoginArgs = {
-  email: Scalars['String'];
-  password: Scalars['String'];
+  input: UserLoginInput;
 };
 
 
 export type MutationRegisterArgs = {
-  email: Scalars['String'];
-  username: Scalars['String'];
-  password: Scalars['String'];
+  input: UserRegisterInput;
 };
 
 export type Query = {
@@ -58,6 +55,11 @@ export type UserLoginBadUserInputError = Error & {
   message: Scalars['String'];
 };
 
+export type UserLoginInput = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
 export type UserLoginResult = User | UserLoginBadUserInputError;
 
 export type UserRegisterBadUserInputError = Error & {
@@ -66,6 +68,12 @@ export type UserRegisterBadUserInputError = Error & {
   emailErrorMessage?: Maybe<Scalars['String']>;
   usernameErrorMessage?: Maybe<Scalars['String']>;
   passwordErrorMessage?: Maybe<Scalars['String']>;
+};
+
+export type UserRegisterInput = {
+  email: Scalars['String'];
+  username: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type UserRegisterResult = User | UserRegisterBadUserInputError;
@@ -108,7 +116,7 @@ export const UserFieldsFragmentDoc = gql`
     `;
 export const LoginDocument = gql`
     mutation login($email: String!, $password: String!) {
-  login(email: $email, password: $password) {
+  login(input: {email: $email, password: $password}) {
     __typename
     ... on User {
       ...UserFields
@@ -121,7 +129,7 @@ export const LoginDocument = gql`
     ${UserFieldsFragmentDoc}`;
 export const RegisterDocument = gql`
     mutation register($email: String!, $username: String!, $password: String!) {
-  register(email: $email, username: $username, password: $password) {
+  register(input: {email: $email, username: $username, password: $password}) {
     __typename
     ... on User {
       ...UserFields

@@ -29,15 +29,12 @@ export type Mutation = {
 
 
 export type MutationLoginArgs = {
-  email: Scalars['String'];
-  password: Scalars['String'];
+  input: UserLoginInput;
 };
 
 
 export type MutationRegisterArgs = {
-  email: Scalars['String'];
-  username: Scalars['String'];
-  password: Scalars['String'];
+  input: UserRegisterInput;
 };
 
 export type Query = {
@@ -58,6 +55,11 @@ export type UserLoginBadUserInputError = Error & {
   message: Scalars['String'];
 };
 
+export type UserLoginInput = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
 export type UserLoginResult = User | UserLoginBadUserInputError;
 
 export type UserRegisterBadUserInputError = Error & {
@@ -66,6 +68,12 @@ export type UserRegisterBadUserInputError = Error & {
   emailErrorMessage?: Maybe<Scalars['String']>;
   usernameErrorMessage?: Maybe<Scalars['String']>;
   passwordErrorMessage?: Maybe<Scalars['String']>;
+};
+
+export type UserRegisterInput = {
+  email: Scalars['String'];
+  username: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type UserRegisterResult = User | UserRegisterBadUserInputError;
@@ -147,8 +155,10 @@ export type ResolversTypes = {
   User: ResolverTypeWrapper<User>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   UserLoginBadUserInputError: ResolverTypeWrapper<UserLoginBadUserInputError>;
+  UserLoginInput: UserLoginInput;
   UserLoginResult: ResolversTypes['User'] | ResolversTypes['UserLoginBadUserInputError'];
   UserRegisterBadUserInputError: ResolverTypeWrapper<UserRegisterBadUserInputError>;
+  UserRegisterInput: UserRegisterInput;
   UserRegisterResult: ResolversTypes['User'] | ResolversTypes['UserRegisterBadUserInputError'];
 };
 
@@ -162,8 +172,10 @@ export type ResolversParentTypes = {
   User: User;
   Int: Scalars['Int'];
   UserLoginBadUserInputError: UserLoginBadUserInputError;
+  UserLoginInput: UserLoginInput;
   UserLoginResult: ResolversParentTypes['User'] | ResolversParentTypes['UserLoginBadUserInputError'];
   UserRegisterBadUserInputError: UserRegisterBadUserInputError;
+  UserRegisterInput: UserRegisterInput;
   UserRegisterResult: ResolversParentTypes['User'] | ResolversParentTypes['UserRegisterBadUserInputError'];
 };
 
@@ -174,9 +186,9 @@ export type ErrorResolvers<ContextType = { ctx: ParameterizedContext<any, { user
 
 export type MutationResolvers<ContextType = { ctx: ParameterizedContext<any, { user: User }> }, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  login?: Resolver<ResolversTypes['UserLoginResult'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
+  login?: Resolver<ResolversTypes['UserLoginResult'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'input'>>;
   logout?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  register?: Resolver<ResolversTypes['UserRegisterResult'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'email' | 'username' | 'password'>>;
+  register?: Resolver<ResolversTypes['UserRegisterResult'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'input'>>;
 };
 
 export type QueryResolvers<ContextType = { ctx: ParameterizedContext<any, { user: User }> }, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {

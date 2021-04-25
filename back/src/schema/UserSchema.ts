@@ -11,11 +11,22 @@ const typeDefs = gql`
     me: User
   }
 
+  input UserLoginInput {
+    email: String!
+    password: String!
+  }
+
   type UserLoginBadUserInputError implements Error {
     message: String!
   }
 
   union UserLoginResult = User | UserLoginBadUserInputError
+
+  input UserRegisterInput {
+    email: String!
+    username: String!
+    password: String!
+  }
 
   type UserRegisterBadUserInputError implements Error {
     message: String!
@@ -27,8 +38,8 @@ const typeDefs = gql`
   union UserRegisterResult = User | UserRegisterBadUserInputError
 
   extend type Mutation {
-    login(email: String!, password: String!): UserLoginResult!
-    register(email: String!, username: String!, password: String!): UserRegisterResult!
+    login(input: UserLoginInput!): UserLoginResult!
+    register(input: UserRegisterInput!): UserRegisterResult!
     logout: Boolean!
   }
 `;

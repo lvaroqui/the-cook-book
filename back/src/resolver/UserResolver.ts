@@ -40,9 +40,10 @@ const UserResolver: Resolvers = {
     },
   },
   Mutation: {
-    register: async (_, { email, username, password }) => {
-      const emailUsed = (await userRepository().findOne({ email })) != undefined;
-      const usernameUsed = (await userRepository().findOne({ username })) != undefined;
+    register: async (_, { input }) => {
+      const emailUsed = (await userRepository().findOne({ email: input.email })) != undefined;
+      const usernameUsed =
+        (await userRepository().findOne({ username: input.username })) != undefined;
 
       if (emailUsed || usernameUsed) {
         return {
@@ -53,7 +54,7 @@ const UserResolver: Resolvers = {
         };
       }
 
-      const user = await User.create(email, username, password);
+      const user = await User.create(input.email, input.username, input.password);
 
       await userRepository().save(user);
       return {
@@ -62,14 +63,14 @@ const UserResolver: Resolvers = {
       };
     },
 
-    login: async (_, { email, password }, { ctx }) => {
+    login: async (_, { input }, { ctx }) => {
       // Check user
       const user = await userRepository().findOne({
-        email: email,
+        email: input.email,
       });
 
       // If user does not exists or password doesn't match
-      if (!user || !(await user.checkPassword(password))) {
+      if (!user || !(await user.checkPassword(input.password))) {
         return {
           __typename: 'UserLoginBadUserInputError',
           message: 'Bad email or password',
