@@ -11,7 +11,7 @@ const typeDefs = gql`
     me: User
   }
 
-  input UserLoginInput {
+  input UserLoginInput @constraint(errorType: "UserLoginBadUserInputError") {
     email: String!
     password: String!
   }
@@ -22,10 +22,10 @@ const typeDefs = gql`
 
   union UserLoginResult = User | UserLoginBadUserInputError
 
-  input UserRegisterInput {
-    email: String!
-    username: String!
-    password: String!
+  input UserRegisterInput @constraint(errorType: "UserRegisterBadUserInputError") {
+    email: String! @constraint(joi: ".email()")
+    username: String! @constraint(joi: ".min(2).max(20)")
+    password: String! @constraint(joi: ".min(8)")
   }
 
   type UserRegisterBadUserInputError implements Error {

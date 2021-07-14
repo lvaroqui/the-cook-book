@@ -15,6 +15,11 @@ const Mutation = gql`
 `;
 
 const Common = gql`
+  directive @constraint(
+    joi: String = ""
+    errorType: String = ""
+  ) on INPUT_FIELD_DEFINITION | INPUT_OBJECT
+
   interface Error {
     message: String!
   }

@@ -3,6 +3,7 @@ import { Middleware } from 'koa';
 
 import User from '../entity/User';
 import { Resolvers } from '../generated/graphql';
+import { userRegisterInputSchema, validate } from '../generated/joi-schema';
 import userRepository from '../repository/UserRepository';
 
 const SECRET = 'secret';
@@ -33,6 +34,15 @@ export const authenticate: Middleware = async (ctx, next) => {
   await next();
 };
 
+// const userRegisterInputSchema = new In(
+//   'UserRegisterBadUserInputError',
+//   Joi.object({
+//     email: Joi.string().required().email(),
+//     username: Joi.string().required().min(2).max(20),
+//     password: Joi.string().required().min(8),
+//   })
+// );
+
 const UserResolver: Resolvers = {
   Query: {
     me: async (_0, _1, { ctx }) => {
@@ -41,6 +51,9 @@ const UserResolver: Resolvers = {
   },
   Mutation: {
     register: async (_, { input }) => {
+      const error = validate(input, userRegisterInputSchema);
+      if (error) return error;
+
       const emailUsed = (await userRepository().findOne({ email: input.email })) != undefined;
       const usernameUsed =
         (await userRepository().findOne({ username: input.username })) != undefined;

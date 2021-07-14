@@ -1,0 +1,25 @@
+{
+  "name": "generator",
+  "version": "1.0.0",
+  "author": "Luc Varoqui",
+  "license": "MIT",
+  "private": false,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc && cp src/lib.ts dist"
+  },
+  "devDependencies": {
+    "@graphql-codegen/plugin-helpers": "^1.18.5",
+    "@types/node": "^16.11.10",
+    "graphql": "^15.5.0",
+    "typescript": "^4.2.4"
+  },
+  "peerDependencies": {
+    "joi": "^17.4.2"
+  }
+}

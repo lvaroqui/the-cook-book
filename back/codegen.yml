@@ -14,3 +14,6 @@ generates:
     config:
       maybeValue: T | null | undefined
       contextType: '{ ctx: ParameterizedContext<any, { user: User }> }'
+  src/generated/joi-schema.ts:
+    plugins:
+      - '../constraint-gen/index.js'

@@ -4,7 +4,7 @@
   "description": "Frontend",
   "license": "MIT",
   "scripts": {
-    "dev": "concurrently \"vite --host 0.0.0.0 --port 443 --https true\" \"yarn generate --watch\"",
+    "dev": "concurrently \"vite --host 0.0.0.0 --port 443 --https true\" \"yarn generate --watch\" \"../scripts/when-changed.sh ../shared/generated/joi-schema.ts 'cp ../shared/generated/joi-schema.ts ./src/generated/'\"",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
     "fix": "run-s fix:*",

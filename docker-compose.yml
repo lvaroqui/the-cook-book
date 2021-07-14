@@ -1,19 +1,33 @@
 version: "3.1"
 
 services:
+  constraint-gen:
+    image: node:14
+    environment:
+      YARN_CACHE_FOLDER: /opt/yarn-cache
+    volumes:
+      - ./constraint-gen:/opt/constraint-gen
+      - yarn-cache-constraint-gen:/opt/yarn-cache
+    working_dir: /opt/constraint-gen
+    entrypoint: ./entrypoint.sh
+    command: yarn run build
+
   back:
     image: node:14
     environment:
       YARN_CACHE_FOLDER: /opt/yarn-cache
     volumes:
-      - ./back:/opt/back
       - yarn-cache-back:/opt/yarn-cache
+      - ./back:/opt/back
+      - ./shared:/opt/shared
       - ./scripts:/opt/scripts:ro
+      - ./constraint-gen/dist:/opt/constraint-gen:ro
     working_dir: /opt/back
     entrypoint: ./entrypoint.sh
     command: yarn run dev
     depends_on:
       - db
+      - constraint-gen
 
   db:
     image: postgres
@@ -28,14 +42,15 @@ services:
     environment:
       YARN_CACHE_FOLDER: /opt/yarn-cache
     volumes:
-      - ./front:/opt/front
       - yarn-cache-front:/opt/yarn-cache
+      - ./front:/opt/front
+      - ./shared:/opt/shared:ro
       - ./scripts:/opt/scripts:ro
     working_dir: /opt/front
     entrypoint: ./entrypoint.sh
     command: yarn dev
     depends_on:
-      - "back"
+      - back
 
   nginx:
     build: nginx-dev
@@ -50,5 +65,6 @@ services:
     stop_signal: SIGINT
 
 volumes:
-  yarn-cache-back:
-  yarn-cache-front:
+  yarn-cache-constraint-gen: null
+  yarn-cache-back: null
+  yarn-cache-front: null
