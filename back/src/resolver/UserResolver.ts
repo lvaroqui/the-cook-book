@@ -78,8 +78,10 @@ const UserResolver: Resolvers = {
 
       const token = jwt.sign({ id: user.id }, SECRET);
       ctx.cookies.set('Authorization', token, {
+        maxAge: 1000 * 3600 * 24 * 30, // One month
         secure: true,
         httpOnly: true,
+        sameSite: 'strict',
       });
 
       return {
