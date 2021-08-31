@@ -1,13 +1,7 @@
 <template>
   <div class="min-h-screen flex flex-col">
     <TheNavBar />
-    <RouterView v-slot="{ Component }">
-      <suspense>
-        <div class="flex flex-1">
-          <component :is="Component" />
-        </div>
-      </suspense>
-    </RouterView>
+    <RouterView class="flex flex-1"> </RouterView>
   </div>
 </template>
 

@@ -3,7 +3,14 @@
     <label :class="labelClass" class="ml-2"><slot /></label>
     <input
       v-focus="focus"
-      class="w-full shadow-md transition-colors duration-300 border-gray-300 focus:border-gray-400"
+      class="
+        w-full
+        shadow-md
+        transition-colors
+        duration-300
+        border-gray-300
+        focus:border-gray-400
+      "
       :class="inputClass"
       v-bind="$attrs"
       :value="modelValue"

@@ -75,19 +75,10 @@ export type UserRegisterResult = User | UserRegisterBadUserInputError;
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
 
-export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
-  fragment: string;
+export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
-
-export type NewStitchingResolver<TResult, TParent, TContext, TArgs> = {
-  selectionSet: string;
-  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
-};
-export type StitchingResolver<TResult, TParent, TContext, TArgs> = LegacyStitchingResolver<TResult, TParent, TContext, TArgs> | NewStitchingResolver<TResult, TParent, TContext, TArgs>;
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
-  | ResolverFn<TResult, TParent, TContext, TArgs>
-  | StitchingResolver<TResult, TParent, TContext, TArgs>;
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -148,32 +139,32 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Query: ResolverTypeWrapper<{}>;
+  Error: ResolversTypes['UserLoginBadUserInputError'] | ResolversTypes['UserRegisterBadUserInputError'];
   String: ResolverTypeWrapper<Scalars['String']>;
+  Mutation: ResolverTypeWrapper<{}>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Query: ResolverTypeWrapper<{}>;
   User: ResolverTypeWrapper<User>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
-  Mutation: ResolverTypeWrapper<{}>;
-  UserLoginResult: ResolversTypes['User'] | ResolversTypes['UserLoginBadUserInputError'];
   UserLoginBadUserInputError: ResolverTypeWrapper<UserLoginBadUserInputError>;
-  Error: ResolversTypes['UserLoginBadUserInputError'] | ResolversTypes['UserRegisterBadUserInputError'];
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  UserRegisterResult: ResolversTypes['User'] | ResolversTypes['UserRegisterBadUserInputError'];
+  UserLoginResult: ResolversTypes['User'] | ResolversTypes['UserLoginBadUserInputError'];
   UserRegisterBadUserInputError: ResolverTypeWrapper<UserRegisterBadUserInputError>;
+  UserRegisterResult: ResolversTypes['User'] | ResolversTypes['UserRegisterBadUserInputError'];
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Query: {};
+  Error: ResolversParentTypes['UserLoginBadUserInputError'] | ResolversParentTypes['UserRegisterBadUserInputError'];
   String: Scalars['String'];
+  Mutation: {};
+  Boolean: Scalars['Boolean'];
+  Query: {};
   User: User;
   Int: Scalars['Int'];
-  Mutation: {};
-  UserLoginResult: ResolversParentTypes['User'] | ResolversParentTypes['UserLoginBadUserInputError'];
   UserLoginBadUserInputError: UserLoginBadUserInputError;
-  Error: ResolversParentTypes['UserLoginBadUserInputError'] | ResolversParentTypes['UserRegisterBadUserInputError'];
-  Boolean: Scalars['Boolean'];
-  UserRegisterResult: ResolversParentTypes['User'] | ResolversParentTypes['UserRegisterBadUserInputError'];
+  UserLoginResult: ResolversParentTypes['User'] | ResolversParentTypes['UserLoginBadUserInputError'];
   UserRegisterBadUserInputError: UserRegisterBadUserInputError;
+  UserRegisterResult: ResolversParentTypes['User'] | ResolversParentTypes['UserRegisterBadUserInputError'];
 };
 
 export type ErrorResolvers<ContextType = { ctx: ParameterizedContext<any, { user: User }> }, ParentType extends ResolversParentTypes['Error'] = ResolversParentTypes['Error']> = {
@@ -232,9 +223,3 @@ export type Resolvers<ContextType = { ctx: ParameterizedContext<any, { user: Use
   UserRegisterResult?: UserRegisterResultResolvers<ContextType>;
 };
 
-
-/**
- * @deprecated
- * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
- */
-export type IResolvers<ContextType = { ctx: ParameterizedContext<any, { user: User }> }> = Resolvers<ContextType>;

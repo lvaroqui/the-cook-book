@@ -4,6 +4,8 @@ import * as Dom from 'graphql-request/dist/types.dom';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -68,10 +70,7 @@ export type UserRegisterBadUserInputError = Error & {
 
 export type UserRegisterResult = User | UserRegisterBadUserInputError;
 
-export type UserFieldsFragment = (
-  { __typename?: 'User' }
-  & Pick<User, 'id' | 'email' | 'username'>
-);
+export type UserFieldsFragment = { __typename?: 'User', id: number, email: string, username: string };
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
@@ -79,16 +78,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = (
-  { __typename?: 'Mutation' }
-  & { login: (
-    { __typename: 'User' }
-    & UserFieldsFragment
-  ) | (
-    { __typename: 'UserLoginBadUserInputError' }
-    & Pick<UserLoginBadUserInputError, 'message'>
-  ) }
-);
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename: 'User', id: number, email: string, username: string } | { __typename: 'UserLoginBadUserInputError', message: string } };
 
 export type RegisterMutationVariables = Exact<{
   email: Scalars['String'];
@@ -97,35 +87,17 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = (
-  { __typename?: 'Mutation' }
-  & { register: (
-    { __typename: 'User' }
-    & UserFieldsFragment
-  ) | (
-    { __typename: 'UserRegisterBadUserInputError' }
-    & Pick<UserRegisterBadUserInputError, 'message' | 'emailErrorMessage' | 'usernameErrorMessage' | 'passwordErrorMessage'>
-  ) }
-);
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename: 'User', id: number, email: string, username: string } | { __typename: 'UserRegisterBadUserInputError', message: string, emailErrorMessage?: Maybe<string>, usernameErrorMessage?: Maybe<string>, passwordErrorMessage?: Maybe<string> } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = (
-  { __typename?: 'Query' }
-  & { me?: Maybe<(
-    { __typename?: 'User' }
-    & UserFieldsFragment
-  )> }
-);
+export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: number, email: string, username: string }> };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LogoutMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'logout'>
-);
+export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
 
 export const UserFieldsFragmentDoc = gql`
     fragment UserFields on User {
@@ -176,23 +148,24 @@ export const LogoutDocument = gql`
 }
     `;
 
-export type SdkFunctionWrapper = <T>(action: () => Promise<T>) => Promise<T>;
+export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string) => Promise<T>;
 
 
-const defaultWrapper: SdkFunctionWrapper = sdkFunction => sdkFunction();
+const defaultWrapper: SdkFunctionWrapper = (action, _operationName) => action();
+
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
     login(variables: LoginMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<LoginMutation> {
-      return withWrapper(() => client.request<LoginMutation>(LoginDocument, variables, requestHeaders));
+      return withWrapper((wrappedRequestHeaders) => client.request<LoginMutation>(LoginDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'login');
     },
     register(variables: RegisterMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RegisterMutation> {
-      return withWrapper(() => client.request<RegisterMutation>(RegisterDocument, variables, requestHeaders));
+      return withWrapper((wrappedRequestHeaders) => client.request<RegisterMutation>(RegisterDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'register');
     },
     me(variables?: MeQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<MeQuery> {
-      return withWrapper(() => client.request<MeQuery>(MeDocument, variables, requestHeaders));
+      return withWrapper((wrappedRequestHeaders) => client.request<MeQuery>(MeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'me');
     },
     logout(variables?: LogoutMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<LogoutMutation> {
-      return withWrapper(() => client.request<LogoutMutation>(LogoutDocument, variables, requestHeaders));
+      return withWrapper((wrappedRequestHeaders) => client.request<LogoutMutation>(LogoutDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'logout');
     }
   };
 }

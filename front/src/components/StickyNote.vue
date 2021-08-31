@@ -1,6 +1,14 @@
 <template>
   <div
-    class="font-hand-writing bg-main-200 text-center shadow-lg max-w-sm h-80 px-4"
+    class="
+      font-hand-writing
+      bg-main-200
+      text-center
+      shadow-lg
+      max-w-sm
+      h-80
+      px-4
+    "
     :style="`transform: rotate(${tilt}deg)`"
   >
     <h2 class="text-4xl font-bold m-2">

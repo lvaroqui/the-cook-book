@@ -3,12 +3,26 @@
     <div class="image shadow-inner">
       <div class="container flex flex-col justify-end mx-auto">
         <h1
-          class="text-3xl md:text-4xl text-shadow text-secondary-50 font-bold ml-3 mt-5"
+          class="
+            text-3xl
+            md:text-4xl
+            text-shadow text-secondary-50
+            font-bold
+            ml-3
+            mt-5
+          "
         >
           The Cook Book
         </h1>
         <h2
-          class="text-3xl md:text-4xl text-shadow text-secondary-50 font-hand-writing ml-3 my-2"
+          class="
+            text-3xl
+            md:text-4xl
+            text-shadow text-secondary-50
+            font-hand-writing
+            ml-3
+            my-2
+          "
         >
           Plan your meals, hassle-free!
         </h2>
@@ -17,12 +31,26 @@
             <input
               v-model="email"
               type="email"
-              class="px-3 pb-0.5 hidden md:block border-2 border-secondary-400 rounded-full rounded-r-none"
+              class="
+                px-3
+                pb-0.5
+                hidden
+                md:block
+                border-2 border-secondary-400
+                rounded-full rounded-r-none
+              "
               placeholder="email@example.com"
               @keyup.enter="goToRegister"
             />
             <button
-              class="bg-secondary-400 font-bold border-2 border-secondary-400 px-6 rounded-full md:rounded-l-none"
+              class="
+                bg-secondary-400
+                font-bold
+                border-2 border-secondary-400
+                px-6
+                rounded-full
+                md:rounded-l-none
+              "
               tag="div"
               @click="goToRegister"
             >
