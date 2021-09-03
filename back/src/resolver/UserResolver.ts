@@ -16,7 +16,7 @@ export const authenticate: Middleware = async (ctx, next) => {
   let token: { id: string };
 
   try {
-    token = jwt.verify(cookie, 'secret') as { id: string };
+    token = jwt.verify(cookie, SECRET) as { id: string };
   } catch (error) {
     ctx.cookies.set('Authorization');
     return await next();

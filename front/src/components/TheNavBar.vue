@@ -3,7 +3,7 @@
     <div class="container mx-auto flex">
       <router-link class="mx-2 py-2" to="/">The Cook Book</router-link>
       <div class="flex-grow"></div>
-      <template v-if="!authenticated">
+      <template v-if="!user">
         <router-link
           tag="div"
           class="px-6 py-2 h-full transition duration-300 hover:bg-main-300"
@@ -21,7 +21,15 @@
           Welcome {{ user.username }}
         </router-link>
         <div
-          class="px-6 py-2 h-full transition duration-300 hover:bg-main-300"
+          class="
+            px-6
+            py-2
+            h-full
+            transition
+            duration-300
+            hover:bg-main-300
+            cursor-pointer
+          "
           @click="logout"
         >
           Logout
@@ -48,9 +56,6 @@ export default defineComponent({
 
     return {
       logout,
-      authenticated: computed(() => {
-        return authStore.authenticated;
-      }),
       user: computed(() => {
         return authStore.user;
       }),

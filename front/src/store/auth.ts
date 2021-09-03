@@ -10,11 +10,6 @@ export const useAuthStore = defineStore({
       fetching: false,
     };
   },
-  getters: {
-    authenticated(): boolean {
-      return this.user !== null;
-    },
-  },
   actions: {
     async logout() {
       return new Promise<void>((resolve) => {
@@ -40,7 +35,7 @@ export const useAuthStore = defineStore({
     async checkAuthenticated() {
       return new Promise<boolean>((resolve) => {
         // If authenticated, don't fetch API
-        if (this.authenticated) {
+        if (this.user !== null) {
           resolve(true);
           return;
         }
@@ -50,7 +45,7 @@ export const useAuthStore = defineStore({
           window.addEventListener(
             'fetchedUser',
             () => {
-              resolve(this.authenticated);
+              resolve(this.user !== null);
             },
             { once: true }
           );
@@ -61,7 +56,7 @@ export const useAuthStore = defineStore({
         this.fetching = true;
         sdk.me().then((data) => {
           this.user = data.me || null;
-          resolve(this.authenticated);
+          resolve(this.user !== null);
           this.fetching = false;
           window.dispatchEvent(new Event('fetchedUser'));
         });
