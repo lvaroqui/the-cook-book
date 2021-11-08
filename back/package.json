@@ -22,7 +22,7 @@
     "node": ">=10"
   },
   "dependencies": {
-    "apollo-server": "^3.3.0",
+    "apollo-server": "^3.4.1",
     "apollo-server-koa": "^3.3.0",
     "bcrypt": "^5.0.0",
     "email-validator": "^2.0.4",
